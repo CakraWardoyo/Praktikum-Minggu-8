@@ -30,6 +30,6 @@
         <div class="row">
 <h2>Proses Order sukses</h2>
 <div class="kotak2">
-    <p>Terima kasih sudah berbelanja di toko Komang.My.ID Shop. Order anda sudah masuk ke database kami, dan dalam 2 x 24 Jam barang akan sampai di tempat anda.<br>
+    <p>Terima kasih sudah berbelanja di sini. Order anda sudah masuk ke database kami, dan dalam 7 x 24 Jam teknisi kami akan sampai di tempat anda.<br>
         Jangan segan mengontak kami jika ada permasalahan!</p>
 </div>
