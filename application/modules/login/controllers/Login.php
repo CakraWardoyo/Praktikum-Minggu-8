@@ -7,6 +7,7 @@ class Login extends CI_Controller
     {
         parent::__construct();
         $this->load->library('form_validation');
+        $this->load->model('LoginModel');
     }
     public function index()
     {
@@ -17,19 +18,47 @@ class Login extends CI_Controller
     
     public function register()
     {
-        $this->form_validation->set_rules('name', 'Name', 'required|trim');
-        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email');
-        $this->form_validation->set_rules('password1', 'Password', 'required|trim|min_length[4]|matches[password2]',['matches' => 'Password Tidak Sama', 'min_length' => 'Terlalu Pendek']);
-        $this->form_validation->set_rules('password2', 'Password', 'required|trim|matches[password1]');
+        $data['title'] = 'Machine-KU Registration';
+        $this->load->view('templates/auth_header', $data);  
+        $this->load->view('v_daftar');
+        $this->load->view('templates/auth_footer');     
+    }
 
-        if ($this->form_validation->run() == false){
-            $data['title'] = 'Machine-KU Registration';
-            $this->load->view('templates/auth_header', $data);  
-            $this->load->view('v_daftar');
-            $this->load->view('templates/auth_footer');
-        }else{
-            echo "berhasi";
-        }
+    public function simpan_data()
+    {
         
+        // masukkan data ke database
+        $data = array(
+            'name' => $this->input->post('name'),
+            'email' => $this->input->post('email'),
+            'alamat' => $this->input->post('alamat'),
+            'password' => password_hash($this->input->post('password1'), PASSWORD_BCRYPT));
+        if ($this->LoginModel->tambah_user($data)) {
+            echo "sukses";
+        }else{
+            echo "Gagal";
+        }
+        // echo "BLOK";
+        // var_dump($data);
+    }
+
+    public function masuk()
+    {
+        $email = $this->input->post('email');
+        $password = $this->input->post('password1');
+        
+        $rL = $this->LoginModel->masuk($email);
+
+        if ($rL -> num_rows() == 1) {
+            $res = $rL -> result_array()[0];
+            $passwordDb = $res['password'];
+            if (password_verify($password, $passwordDb)) {
+                $this->session->set_userdata('name', $res['name']);
+                redirect(base_url('Toko'));
+            }else{
+                echo "+()+";
+            }
+        }
+        // var_dump($rL);
     }
 }
